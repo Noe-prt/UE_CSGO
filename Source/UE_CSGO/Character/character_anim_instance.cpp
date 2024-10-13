@@ -3,17 +3,17 @@
 
 #include "character_anim_instance.h"
 
-#include "character_master.h"
 #include "GameFramework/Character.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 void Ucharacter_anim_instance::NativeUpdateAnimation(float DeltaTime)
 {
 	Super::NativeUpdateAnimation(DeltaTime);
 
-	UpdateAnimationProperties();
+	UpdateAnimationProperties(DeltaTime);
 }
 
-void Ucharacter_anim_instance::UpdateAnimationProperties()
+void Ucharacter_anim_instance::UpdateAnimationProperties(float DeltaTime)
 {
 	APawn*		pawn;
 	Acharacter_master*		character;
@@ -21,16 +21,13 @@ void Ucharacter_anim_instance::UpdateAnimationProperties()
 	pawn = TryGetPawnOwner();
 	if (pawn)
 	{
-		movement_speed = pawn->GetVelocity().Size();
-		movement_direction = CalculateDirection(pawn->GetVelocity(), pawn->GetActorRotation());
-		if (movement_direction < -170.f || movement_direction > 170.f)
-		{
-			movement_direction = 180.f;
-		}
+		set_movement_speed(pawn->GetVelocity().Size());
+		set_movement_direction(CalculateDirection(pawn->GetVelocity(), pawn->GetActorRotation()));
 		character = Cast<Acharacter_master>(pawn);
 		if (character)
 		{
-			b_crouch = character->is_crouching();
+			set_is_in_air(character->GetCharacterMovement()->IsFalling());
+			set_movement_state(character->get_movement_state());
 		}
 	}
 }
