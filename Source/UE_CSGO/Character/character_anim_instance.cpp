@@ -27,7 +27,9 @@ void Ucharacter_anim_instance::UpdateAnimationProperties(float DeltaTime)
 		if (character)
 		{
 			set_is_in_air(character->GetCharacterMovement()->IsFalling());
-			set_movement_state(character->get_movement_state());
+			movement_state = character->get_movement_state();
+			equipped_weapon_animation_type = character->get_equipped_weapon_animation_type();
+			set_aim_direction(character->get_aim_direction());
 		}
 	}
 }

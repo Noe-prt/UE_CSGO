@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "character_master.h"
+#include "UE_CSGO/UE_CSGO.h"
 #include "Animation/AnimInstance.h"
 #include "character_anim_instance.generated.h"
 
@@ -24,21 +25,26 @@ public:
 	float get_movement_direction() const {  return movement_direction;  };
 	
 	void set_movement_direction(float val) { movement_direction = val; };
+
+	UFUNCTION(BlueprintCallable, Category = "Animation", meta = (BlueprintThreadSafe))
+	float get_aim_direction() const {  return aim_direction;  };
+
+	void set_aim_direction(float val) { aim_direction = val; };
 	
 	UFUNCTION(BlueprintCallable, Category = "Animation", meta = (BlueprintThreadSafe))
 	bool get_is_in_air() const {  return b_is_in_air;  };
 	
 	void set_is_in_air(bool val) { b_is_in_air = val; };
 
-	UFUNCTION(BlueprintCallable, Category = "Animation", meta = (BlueprintThreadSafe))
-	TArray<e_movement_state>& get_movement_state() {  return movement_state; };
-
-	void set_movement_state(TArray<e_movement_state>& val) { movement_state = val; };
 private:
 	virtual void NativeUpdateAnimation(float DeltaTime) override;
 	void UpdateAnimationProperties(float DeltaTime);
 	float	movement_speed;
 	float	movement_direction;
+	float	aim_direction;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Animation", meta = (AllowPrivateAccess = "true"))
 	TArray<e_movement_state> movement_state;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Animation", meta = (AllowPrivateAccess = "true"))
+	e_weapon_animation_type	equipped_weapon_animation_type;
 	bool b_is_in_air;
 };
